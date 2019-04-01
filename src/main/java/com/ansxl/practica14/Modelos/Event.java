@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Evento implements Serializable {
+public class Event implements Serializable {
 
     @Id
     private long id;
@@ -16,7 +16,7 @@ public class Evento implements Serializable {
     private CalendarItemTheme color;
 
 
-    public Evento(long id, String name, Date date, CalendarItemTheme color) {
+    public Event(long id, String name, Date date, CalendarItemTheme color) {
         this.id = id;
         this.name = name;
         this.date = date;
