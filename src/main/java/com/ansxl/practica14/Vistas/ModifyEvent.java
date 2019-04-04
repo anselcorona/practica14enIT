@@ -17,37 +17,62 @@ import org.vaadin.calendar.CalendarItemTheme;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Random;
 
 @SpringComponent
 @UIScope
-public class EventView extends VerticalLayout {
+public class ModifyEvent extends VerticalLayout {
     TextField title = new TextField("Título");
     DatePicker datePicker = new DatePicker();
+    long originalId;
+    String originaltitle;
+    LocalDate originaldate;
+    boolean updated;
+    CalendarItemTheme originalcolor;
 
-    public EventView(@Autowired EventService eventService){
+    public ModifyEvent(@Autowired EventService eventService){
         FormLayout formLayout = new FormLayout();
         H2 header = new H2("Nuevo Correo");
         datePicker.setLabel("Seleccione fecha de evento");
         datePicker.setPlaceholder("Fecha de Evento");
         datePicker.setValue(LocalDate.now());
-        Button save = new Button("Guardar");
-        save.getElement().setAttribute("theme", "success");
+        Button edit = new Button("Editar");
+        edit.getElement().setAttribute("theme", "success");
         Button cancel = new Button("Cancelar");
         cancel.getElement().setAttribute("theme", "error");
-        HorizontalLayout actions = new HorizontalLayout(save, cancel);
+        HorizontalLayout actions = new HorizontalLayout(edit, cancel);
         actions.setSpacing(true);
         formLayout.add(title, datePicker);
 
-        save.addClickListener((e)-> {
+        edit.addClickListener((e)-> {
+                    if (!updated) {
+                        Event event = new Event(
+                                (long) eventService.eventList().size() + 1,
+                                title.getValue(),
+                                Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                                originalcolor
+                        );
+                        try {
+                            eventService.createEvent(event);
+                            title.setValue("");
+                            datePicker.setValue(LocalDate.now());
+                            updated = true;
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        General.calendar.refresh();
+                    }
+                }
+        );
+
+        cancel.addClickListener( (e)->{
                     Event event = new Event(
-                            (long)eventService.eventList().size()+1,
-                            title.getValue(),
-                            Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                            getRandomColor()
+                            originalId,
+                            originaltitle,
+                            Date.from(originaldate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                            originalcolor
                     );
                     try{
-                        eventService.createEvent(event);
+                        eventService.editEvent(event);
                         title.setValue("");
                         datePicker.setValue(LocalDate.now());
                     }catch (Exception ex){
@@ -56,36 +81,6 @@ public class EventView extends VerticalLayout {
                     General.calendar.refresh();
                 }
         );
-
-        cancel.addClickListener( (e)->{
-                    title.setValue("");
-                    datePicker.setValue(LocalDate.now());
-                }
-        );
-
         add(header, formLayout, actions);
-    }
-
-    public static CalendarItemTheme getRandomColor() {
-        Random random = new Random();
-        int num = random.nextInt(8);
-        if(num==0){
-            return CalendarItemTheme.Black;
-        }else if(num == 1) {
-            return CalendarItemTheme.LightGreen;
-        }else if(num==2){
-            return CalendarItemTheme.LightBlue;
-        }else if(num==3){
-            return CalendarItemTheme.Red;
-        } else if(num==4){
-            return CalendarItemTheme.Green;
-        } else if(num==5){
-            return CalendarItemTheme.Gray;
-        } else if(num==6){
-            return CalendarItemTheme.Blue;
-        } else if(num==7){
-            return CalendarItemTheme.LightRed;
-        }
-        return CalendarItemTheme.Blue;
     }
 }

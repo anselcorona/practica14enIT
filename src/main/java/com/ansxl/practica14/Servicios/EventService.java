@@ -27,4 +27,11 @@ public class EventService {
     public Event createEvent(Event e){
         return eventRepository.save(e);
     }
+    public Event editEvent(Event e){
+        return eventRepository.save(e);
+    }
+
+    public void deleteEvent(Event e){
+        eventRepository.delete(e);
+    }
 }

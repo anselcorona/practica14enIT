@@ -30,9 +30,9 @@ public class Email extends VerticalLayout {
         cancel.getElement().setAttribute("theme", "error");
         HorizontalLayout actions = new HorizontalLayout(send, cancel);
         actions.setSpacing(true);
-        formLayout.add(title, To, Subject, Content, actions);
+        formLayout.add(To, Subject, Content);
         setAlignItems(Alignment.CENTER);
-        add(formLayout);
+        add(title, formLayout, actions);
         send.addClickListener((e)->{
             com.sendgrid.Email from = new com.sendgrid.Email("ansxldo@gmail.com");
             String subject = Subject.getValue();
@@ -40,8 +40,7 @@ public class Email extends VerticalLayout {
             com.sendgrid.Content content = new Content("text/plain", Content.getValue());
             Mail email = new Mail(from, subject, to, content);
 
-            String apiKey = "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";
-            SendGrid sg = new SendGrid(apiKey);
+            SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
             Request request = new Request();
 
             try {

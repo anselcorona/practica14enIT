@@ -1,11 +1,13 @@
 package com.ansxl.practica14.Vistas;
 
 import com.ansxl.practica14.Modelos.Event;
+import com.ansxl.practica14.Modelos.User;
 import com.ansxl.practica14.Servicios.EventService;
 import com.ansxl.practica14.Servicios.UserService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -29,7 +31,7 @@ import java.util.List;
 @Route("main")
 @SpringComponent
 @UIScope
-public class general extends VerticalLayout {
+public class General extends VerticalLayout {
     public static CalendarComponent<Event> calendar = new CalendarComponent<Event>()
             .withItemDateGenerator(Event::getDate)
             .withItemLabelGenerator(Event::getName)
@@ -39,10 +41,12 @@ public class general extends VerticalLayout {
     public static EventService eventService;
 
     @Autowired
-    public general(@Autowired Email emailView,
+    public General(@Autowired Email emailView,
                    @Autowired EventView eventView,
-            @Autowired UserService userService, @Autowired EventService eventService){
-        general.eventService = eventService;
+                   @Autowired ModifyEvent modifyEvent,
+                   @Autowired UserService userService,
+                   @Autowired EventService eventService){
+        General.eventService = eventService;
         if(userService.userList().isEmpty()){
             getUI().get().navigate("");
         }
@@ -74,6 +78,17 @@ public class general extends VerticalLayout {
                 dialog.add(eventView);
                 dialog.open();
             });
+            userInfo.addClickListener((event -> getUI().get().navigate("user")));
+            logout.addClickListener((e)->{
+                try {
+                    User u = userService.userList().get(0);
+                    u.setLoggedIn(false);
+                    userService.editUser(u);
+                    getUI().get().navigate("");
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            });
 
             H3 title = new H3("Práctica 14 en IT");
             H5 screen = new H5("Ventana General");
@@ -102,7 +117,19 @@ public class general extends VerticalLayout {
             }
 
             calendar.setDataProvider(new CalendarDataProvider());
-
+            calendar.addEventClickListener(evento ->{
+                eventService.deleteEvent(evento.getDetail());
+                modifyEvent.datePicker.setValue(evento.getDetail().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                modifyEvent.title.setValue(evento.getDetail().getName());
+                modifyEvent.originaltitle = evento.getDetail().getName();
+                modifyEvent.originaldate = evento.getDetail().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                modifyEvent.originalcolor = evento.getDetail().getColor();
+                modifyEvent.originalId = evento.getDetail().getId();
+                modifyEvent.updated = false;
+                Dialog dialog = new Dialog();
+                dialog.add(modifyEvent);
+                dialog.open();
+            });
             add(title, screen, menu, calendar);
         }
     }
@@ -113,7 +140,7 @@ public class general extends VerticalLayout {
 class CalendarDataProvider extends AbstractCalendarDataProvider<Event> {
     @Override
     public Collection<Event> getItems(Date fromDate, Date toDate) {
-        List<Event> eventos = general.eventService.eventList();
+        List<Event> eventos = General.eventService.eventList();
         return eventos;
     }
 }
