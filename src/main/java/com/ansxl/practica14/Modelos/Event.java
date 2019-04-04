@@ -15,6 +15,8 @@ public class Event implements Serializable {
     private Date date;
     private CalendarItemTheme color;
 
+    public Event() {
+    }
 
     public Event(long id, String name, Date date, CalendarItemTheme color) {
         this.id = id;

@@ -3,12 +3,14 @@ package com.ansxl.practica14.Servicios;
 import com.ansxl.practica14.Modelos.Event;
 import com.ansxl.practica14.Repositorios.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.vaadin.calendar.CalendarItemTheme;
 
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class EventService {
 
     @Autowired

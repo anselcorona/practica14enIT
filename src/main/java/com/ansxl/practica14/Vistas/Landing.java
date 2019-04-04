@@ -48,6 +48,7 @@ public class Landing extends VerticalLayout {
                     try{
                         User user = userService.userList().get(0);
                         user.setLoggedIn(true);
+                        userService.editUser(user);
                         getUI().get().navigate("main");
                     }catch (Exception ex){
                         ex.printStackTrace();
