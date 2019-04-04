@@ -32,7 +32,7 @@ public class Landing extends VerticalLayout {
         loginOrSignUp.getElement().setAttribute("theme", "primary");
         loginOrSignUp.setIcon(new Icon(empty?VaadinIcon.SIGN_IN_ALT:VaadinIcon.SIGN_IN));
         H3 title = new H3("Práctica 14 en IT");
-        H5 subtitle = empty ? new H5("Crear cuenta") : new H5("Iniciar Sesión");
+        H5 screen = empty ? new H5("Crear cuenta") : new H5("Iniciar Sesión");
 
         setAlignItems(Alignment.CENTER);
         loginOrSignUp.addClickListener((ComponentEventListener<ClickEvent<Button>>) event -> {
@@ -63,7 +63,7 @@ public class Landing extends VerticalLayout {
 
         setAlignItems(Alignment.CENTER);
         verticalLayout.setWidth("300px");
-        add(title,subtitle, verticalLayout);
+        add(title,screen, verticalLayout);
 
 
 
