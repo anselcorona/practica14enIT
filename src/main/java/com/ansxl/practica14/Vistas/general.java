@@ -40,6 +40,7 @@ public class general extends VerticalLayout {
 
     @Autowired
     public general(@Autowired Email emailView,
+                   @Autowired EventView eventView,
             @Autowired UserService userService, @Autowired EventService eventService){
         general.eventService = eventService;
         if(userService.userList().isEmpty()){
@@ -53,19 +54,24 @@ public class general extends VerticalLayout {
             HorizontalLayout menu = new HorizontalLayout();
             menu.setSpacing(true);
 
-            Button EventView = new Button("Crear Evento");
+            Button NewEvent = new Button("Crear Evento");
             Button email = new Button("Enviar Correo Electrónico");
             Button userInfo = new Button("Gestionar Usuarios");
             Button logout = new Button("Cerrar Sesión");
             email.getElement().setAttribute("theme", "success");
-            EventView.getElement().setAttribute("theme","primary");
+            NewEvent.getElement().setAttribute("theme","primary");
             userInfo.getElement().setAttribute("theme", "error");
             logout.getElement().setAttribute("theme", "primary");
-            menu = new HorizontalLayout(EventView, email, userInfo, logout);
+            menu = new HorizontalLayout(NewEvent, email, userInfo, logout);
 
             email.addClickListener((e)->{
                 Dialog dialog = new Dialog();
                 dialog.add(emailView);
+                dialog.open();
+            });
+            NewEvent.addClickListener((e)->{
+                Dialog dialog = new Dialog();
+                dialog.add(eventView);
                 dialog.open();
             });
 

@@ -23,5 +23,8 @@ public class EventService {
     public Event createEvent(long id, String name, Date date, CalendarItemTheme color){
         return eventRepository.save(new Event(id, name, date, color));
     }
-
+    @Transactional
+    public Event createEvent(Event e){
+        return eventRepository.save(e);
+    }
 }

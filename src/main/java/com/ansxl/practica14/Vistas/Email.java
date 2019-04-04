@@ -4,8 +4,6 @@ import com.sendgrid.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -27,16 +25,12 @@ public class Email extends VerticalLayout {
 
         H2 title = new H2("Nuevo Correo");
         Button send = new Button("Enviar");
-        send.setIcon(new Icon(VaadinIcon.ARROW_FORWARD));
         send.getElement().setAttribute("theme", "success");
         Button cancel = new Button("Cancelar");
-        cancel.setIcon(new Icon(VaadinIcon.STOP));
         cancel.getElement().setAttribute("theme", "error");
         HorizontalLayout actions = new HorizontalLayout(send, cancel);
         actions.setSpacing(true);
-        VerticalLayout verticalLayout = new VerticalLayout(To,Subject,Content);
-        verticalLayout.setWidth("1000px");
-        formLayout.add(title, verticalLayout, actions);
+        formLayout.add(title, To, Subject, Content, actions);
         setAlignItems(Alignment.CENTER);
         add(formLayout);
         send.addClickListener((e)->{
