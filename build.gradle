@@ -36,18 +36,17 @@ ext {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.vaadin:vaadin-spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'com.vaadin:vaadin-spring-boot-starter:10.0.4'
     implementation 'com.sendgrid:sendgrid-java:3.2.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.vaadin.addons:numberfield:0.5.1'
     implementation 'org.vaadin.blackbluegl:calendar-component:2.0-BETA4'
     implementation 'org.vaadin.onur:calendar-component:1.0.0'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'com.sendgrid:sendgrid-java:3.1.0'
 }
 
 dependencyManagement {
