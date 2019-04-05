@@ -8,19 +8,19 @@ import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-
-@Route("user")
+@Route("users")
+@PageTitle("Usuarios")
 @SpringComponent
 @UIScope
-public class Gerente extends VerticalLayout {
-
-    public Gerente(@Autowired UserService userService) {
+public class UserView extends VerticalLayout {
+    public UserView(@Autowired UserService userService) {
         User user;
 
         VerticalLayout verticalLayout;
@@ -65,6 +65,12 @@ public class Gerente extends VerticalLayout {
             H3 title = new H3("Práctica 14 en IT");
             H5 screen = new H5("Modificar Datos del usuario");
 
+            VerticalLayout userData = new VerticalLayout();
+            H3 name = new H3("Nombre del usuario: " + user.getName());
+            H5 email = new H5("Correo electrónico: " + user.getEmail());
+            userData.setAlignItems(Alignment.CENTER);
+            userData.add(name, email);
+
 
 
             userInfo = new VerticalLayout();
@@ -77,15 +83,19 @@ public class Gerente extends VerticalLayout {
 
             userInfo.add(titulo2, new_name, new_email, guardar);
 
-            verticalLayout.add(userInfo);
+            verticalLayout.add(userData, userInfo);
             verticalLayout.setAlignItems(Alignment.CENTER);
             guardar.addClickListener((evento) -> {
                 try {
+                    if (!new_email.getValue().equals(""))
+                        user.setEmail(new_email.getValue());
+                    if (!new_name.getValue().equals(""))
+                        user.setName(new_name.getValue());
                     userService.editUser(user);
+                    getUI().get().getPage().reload();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             });
 
             verticalLayout.setAlignItems(Alignment.CENTER);

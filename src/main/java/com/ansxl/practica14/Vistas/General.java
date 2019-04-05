@@ -10,6 +10,7 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -29,6 +30,7 @@ import java.util.List;
 
 
 @Route("main")
+@PageTitle("Calendario")
 @SpringComponent
 @UIScope
 public class General extends VerticalLayout {
@@ -60,13 +62,15 @@ public class General extends VerticalLayout {
 
             Button NewEvent = new Button("Crear Evento");
             Button email = new Button("Enviar Correo Electrónico");
-            Button userInfo = new Button("Gestionar Usuarios");
+            Button userInfo = new Button("Información de Usuario");
+            Button  gerente = new Button("Gestión de Gerentes");
             Button logout = new Button("Cerrar Sesión");
             email.getElement().setAttribute("theme", "success");
             NewEvent.getElement().setAttribute("theme","primary");
-            userInfo.getElement().setAttribute("theme", "error");
-            logout.getElement().setAttribute("theme", "primary");
-            menu = new HorizontalLayout(NewEvent, email, userInfo, logout);
+            userInfo.getElement().setAttribute("theme", "secondary");
+            logout.getElement().setAttribute("theme", "error");
+            gerente.getElement().setAttribute("theme", "primary");
+            menu = new HorizontalLayout(NewEvent, email, userInfo, gerente, logout);
 
             email.addClickListener((e)->{
                 Dialog dialog = new Dialog();
@@ -78,7 +82,7 @@ public class General extends VerticalLayout {
                 dialog.add(eventView);
                 dialog.open();
             });
-            userInfo.addClickListener((event -> getUI().get().navigate("user")));
+            userInfo.addClickListener((event -> getUI().get().navigate("users")));
             logout.addClickListener((e)->{
                 try {
                     User u = userService.userList().get(0);
