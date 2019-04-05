@@ -83,6 +83,7 @@ public class General extends VerticalLayout {
                 dialog.open();
             });
             userInfo.addClickListener((event -> getUI().get().navigate("users")));
+            gerente.addClickListener(event -> getUI().get().navigate("gerentes"));
             logout.addClickListener((e)->{
                 try {
                     User u = userService.userList().get(0);
